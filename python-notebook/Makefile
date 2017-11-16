@@ -6,13 +6,11 @@ repo_tag=federicociner
 build_dir=latest
 
 image_tag=python-notebook:$(build_dir)
-
 full_image_tag=$(repo_tag)/$(image_tag)
-
-user_image_tag=usernotebook:$(tUSER)
 
 user_id=$$(id -u)
 group_id=$$(id -g)
+container_name=python-notebook
 
 ifeq ($(PORTP),)
 PORTP=8888
@@ -31,15 +29,8 @@ build:
 	@echo "Building container"
 	sudo docker build $(build_dir)
 
-runlocal-jupyter: buildlocal
+runlocal: buildlocal
 	@echo "Running container locally"
-	sudo docker run -d -p $(PORTP):8888 -v ~/Projects:/home/notebook:z $(full_image_tag) jupyter notebook
-
-runlocal-bash: buildlocal
-	@echo "Running container locally"
-	sudo docker run -it -p $(PORTP):8888 -v ~/Projects:/home/notebook:z $(full_image_tag) bash
-
-containername:
-	@echo $(user_image_tag)
+	sudo docker run --name $(container_name) -d -p $(PORTP):8888 -v ~/Projects:/home/notebook:z $(full_image_tag)
 
 .PHONY: buildlocal build runlocal

@@ -51,5 +51,4 @@ RUN chown -R $NB_USER:users /etc/jupyter/
 USER $NB_USER
 
 # Add local files as late as possible to avoid cache busting
-
 COPY start.sh /usr/local/bin/

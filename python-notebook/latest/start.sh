@@ -1,64 +1,31 @@
 #!/bin/bash
-# Copyright (c) Jupyter Development Team.
-# Distributed under the terms of the Modified BSD License.
 
 set -e
 
-# Handle special flags if we're root
-if [ $(id -u) == 0 ] ; then
-
-    # Handle username change. Since this is cheap, do this unconditionally
-    echo "Set username to: $NB_USER"
-    usermod -d /home/$NB_USER -l $NB_USER notebook
-
-    # handle home and working directory if the username changed
-    if [[ "$NB_USER" != "notebook" ]]; then
-        # changing username, make sure homedir exists
-        # (it could be mounted, and we shouldn't create it if it already exists)
-        if [[ ! -e "/home/$NB_USER" ]]; then
-            echo "Relocating home dir to /home/$NB_USER"
-            mv /home/notebook "/home/$NB_USER"
-        fi
-        # if workdir is in /home/notebook, cd to /home/$NB_USER
-        if [[ "$PWD/" == "/home/notebook/"* ]]; then
-            newcwd="/home/$NB_USER/${PWD:13}"
-            echo "Setting CWD to $newcwd"
-            cd "$newcwd"
-        fi
-    fi
-
-    # Change UID of NB_USER to NB_UID if it does not match
-    if [ "$NB_UID" != $(id -u $NB_USER) ] ; then
-        echo "Set $NB_USER UID to: $NB_UID"
-        usermod -u $NB_UID $NB_USER
-    fi
-
-    # Change GID of NB_USER to NB_GID if NB_GID is passed as a parameter
-    if [ "$NB_GID" ] ; then
-        echo "Set $NB_USER GID to: $NB_GID"
-        groupmod -g $NB_GID -o $(id -g -n $NB_USER)
-    fi
-
-    # Enable sudo if requested
-    if [[ "$GRANT_SUDO" == "1" || "$GRANT_SUDO" == 'yes' ]]; then
-        echo "Granting $NB_USER sudo access"
-        echo "$NB_USER ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/notebook
-    fi
-
-    # Exec the command as NB_USER
-    echo "Execute the command: $*"
-    exec su $NB_USER -c "env PATH=$PATH $*"
-else
-  if [[ ! -z "$NB_UID" && "$NB_UID" != "$(id -u)" ]]; then
-      echo 'Container must be run as root to set $NB_UID'
-  fi
-  if [[ ! -z "$NB_GID" && "$NB_GID" != "$(id -g)" ]]; then
-      echo 'Container must be run as root to set $NB_GID'
-  fi
-  if [[ "$GRANT_SUDO" == "1" || "$GRANT_SUDO" == 'yes' ]]; then
-      echo 'Container must be run as root to grant sudo permissions'
-  fi
-    # Exec the command
-    echo "Execute the command: $*"
-    exec $*
+# set default ip to 0.0.0.0
+if [[ "$NOTEBOOK_ARGS $@" != *"--ip="* ]]; then
+  NOTEBOOK_ARGS="--ip=0.0.0.0 $NOTEBOOK_ARGS"
 fi
+if [ ! -z "$NOTEBOOK_DIR" ]; then
+  NOTEBOOK_ARGS="--notebook-dir='$NOTEBOOK_DIR' $NOTEBOOK_ARGS"
+fi
+if [ ! -z "$JPY_PORT" ]; then
+  NOTEBOOK_ARGS="--port=$JPY_PORT $NOTEBOOK_ARGS"
+fi
+if [ ! -z "$JPY_USER" ]; then
+  NOTEBOOK_ARGS="--user=$JPY_USER $NOTEBOOK_ARGS"
+fi
+if [ ! -z "$JPY_COOKIE_NAME" ]; then
+  NOTEBOOK_ARGS="--cookie-name=$JPY_COOKIE_NAME $NOTEBOOK_ARGS"
+fi
+if [ ! -z "$JPY_BASE_URL" ]; then
+  NOTEBOOK_ARGS="--base-url=$JPY_BASE_URL $NOTEBOOK_ARGS"
+fi
+if [ ! -z "$JPY_HUB_PREFIX" ]; then
+  NOTEBOOK_ARGS="--hub-prefix=$JPY_HUB_PREFIX $NOTEBOOK_ARGS"
+fi
+if [ ! -z "$JPY_HUB_API_URL" ]; then
+  NOTEBOOK_ARGS="--hub-api-url=$JPY_HUB_API_URL $NOTEBOOK_ARGS"
+fi
+
+exec jupyter notebook $NOTEBOOK_ARGS $*

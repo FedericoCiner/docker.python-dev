@@ -12,7 +12,7 @@ buildlocal:
 build:
 	sudo docker build $(build_dir)
 
-runlocal: buildlocal
+runlocal:
 	@echo "Running container locally"
 	sudo docker run --net=host  -it $(full_image_tag) /bin/bash
 

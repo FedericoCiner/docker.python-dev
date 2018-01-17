@@ -5,12 +5,12 @@ repo_tag=federicociner
 
 build_dir=latest
 
-image_tag=python-notebook:$(build_dir)
+image_tag=python2-notebook:$(build_dir)
 full_image_tag=$(repo_tag)/$(image_tag)
 
 user_id=$$(id -u)
 group_id=$$(id -g)
-container_name=python-notebook
+container_name=python2-notebook
 
 ifeq ($(PORTP),)
 PORTP=8888

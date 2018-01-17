@@ -1,8 +1,7 @@
 repo_tag=federicociner
 
-version=xenial
-build_dir=$(version)
-image_tag=ubuntu:$(build_dir)
+build_dir=latest
+image_tag=python2-base:$(build_dir)
 
 full_image_tag=$(repo_tag)/$(image_tag)
 
@@ -18,3 +17,4 @@ runlocal:
 	sudo docker run --net=host  -it $(full_image_tag) /bin/bash
 
 .PHONY: buildlocal build runlocal
+

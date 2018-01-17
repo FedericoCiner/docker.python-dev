@@ -23,7 +23,7 @@ RUN mkdir /home/$NB_USER/work
 
 USER root
 
-# Safety step to remove any old ipython packages that may have crept in. If we do not remove, then an import error will occur in jupyter due to the conflict caused by jupyter installing the newest version of ipython.
+# Safety step to remove any old iPython packages that may have crept in. If we do not remove, then an import error will occur in Jupyter due to the conflict caused by Jupyter installing the newest version of iPython.
 RUN apt-get purge -y ipython* && \
     apt-get update && apt-get install sudo && \
     apt-get clean && \

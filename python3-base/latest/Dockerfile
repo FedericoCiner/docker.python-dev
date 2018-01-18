@@ -1,4 +1,4 @@
-# python2-base Dockerfile
+# python3-base Dockerfile
 
 FROM federicociner/ubuntu:xenial
 MAINTAINER Federico Ciner <federico.ciner@gmail.com>
@@ -21,14 +21,15 @@ RUN \
     apt-transport-https \
     build-essential \
     curl \
-    python \
-    python-dev \
-    python-pip \
-    python-matplotlib \
-    python-setuptools && \
-    echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
+    python3 \
+    python3-dev \
+    python3-pip \
+    python3-matplotlib \
+    python3-setuptools \
+    python3-wheel \
+    && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
     locale-gen en_US.utf8 && \
     update-locale LANG=en_US.UTF-8 && \
-    pip install --upgrade pip && \
-    pip install -r /tmp/requirements.txt && \
+    pip3 install --upgrade pip && \
+    pip3 install -r /tmp/requirements.txt && \
   rm -rf /var/lib/apt/lists/*

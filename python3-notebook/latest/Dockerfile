@@ -1,6 +1,6 @@
 # python2-notebook Dockerfile
 
-FROM federicociner/python2-base:latest
+FROM federicociner/python3-base:latest
 MAINTAINER Federico Ciner <federico.ciner@gmail.com>
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -29,7 +29,7 @@ RUN apt-get purge -y ipython* && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN pip install jupyter && pip install jupyterlab
+RUN pip3 install jupyter && pip3 install jupyterlab
 RUN jupyter serverextension enable --py jupyterlab --sys-prefix
 
 RUN echo "root:password" | chpasswd

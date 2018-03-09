@@ -17,3 +17,4 @@ tornado==4.3
 pytz==2016.4
 cycler==0.10.0
 pyparsing==2.1.5
+ipywidgets==7.1.2

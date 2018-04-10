@@ -25,7 +25,7 @@ RUN \
     python3-dev \
     python3-pip \
     python3-setuptools \
-    python3-wheel \
+    python3-tk \
     && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen && \
     locale-gen en_US.utf8 && \
     update-locale LANG=en_US.UTF-8 && \

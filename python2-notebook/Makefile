@@ -32,7 +32,7 @@ build:
 
 runlocal:
 	@echo "Running container locally"
-	sudo docker run --name $(container_name) -d -p $(PORTP):8888 -v ~/Projects:/home/notebook:z $(full_image_tag)
+	sudo docker run --name $(container_name) -d -p $(PORTP):8888 -v ~/workspace:/home/notebook:z $(full_image_tag)
 
 runbash:
 	docker exec -it $(image_name) /bin/bash -c "export COLUMNS=`tput cols`; export LINES=`tput lines`; exec bash"

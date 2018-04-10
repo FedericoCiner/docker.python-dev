@@ -17,3 +17,5 @@ tornado==4.3
 pytz==2016.4
 cycler==0.10.0
 matplotlib==2.2.2
+gym==0.10.5
+pymdptoolbox==4.0-b3

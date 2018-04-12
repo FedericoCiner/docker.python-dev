@@ -37,4 +37,4 @@ runlocal:
 runbash:
 	docker exec -it $(image_name) /bin/bash -c "export COLUMNS=`tput cols`; export LINES=`tput lines`; exec bash"
 
-.PHONY: buildlocal build runlocal
+.PHONY: buildlocal build runlocal runbash

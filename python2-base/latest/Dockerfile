@@ -23,6 +23,7 @@ RUN \
     curl \
     python \
     python-dev \
+    python-tk \
     python-pip \
     python-matplotlib \
     python-setuptools && \

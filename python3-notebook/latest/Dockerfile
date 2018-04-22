@@ -18,16 +18,10 @@ RUN useradd -m -s /bin/bash -N -u $NB_UID $NB_USER
 
 USER $NB_USER
 
-# Setup work directory for backward-compatibility
+# setup work directory for backward-compatibility
 RUN mkdir /home/$NB_USER/work
 
 USER root
-
-# Safety step to remove any old iPython packages that may have crept in. If we do not remove, then an import error will occur in Jupyter due to the conflict caused by Jupyter installing the newest version of iPython.
-RUN apt-get purge -y ipython* && \
-    apt-get update && apt-get install sudo && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN pip3 install jupyter && pip3 install jupyterlab
 RUN jupyter serverextension enable --py jupyterlab --sys-prefix
@@ -35,20 +29,20 @@ RUN jupyter serverextension enable --py jupyterlab --sys-prefix
 RUN echo "root:password" | chpasswd
 RUN echo "notebook:password" | chpasswd
 
-RUN sudo adduser notebook sudo
+RUN adduser notebook sudo
 
 EXPOSE 8888
 WORKDIR $HOME
 
-# Configure container startup
+# configure container startup
 ENTRYPOINT ["tini", "--"]
 CMD ["start.sh"]
 
 COPY jupyter_notebook_config.py /etc/jupyter/
 RUN chown -R $NB_USER:users /etc/jupyter/
 
-# Switch back to jovyan to avoid accidental container runs as root
+# switch back to jovyan to avoid accidental container runs as root
 USER $NB_USER
 
-# Add local files as late as possible to avoid cache busting
+# add local files as late as possible to avoid cache busting
 COPY start.sh /usr/local/bin/

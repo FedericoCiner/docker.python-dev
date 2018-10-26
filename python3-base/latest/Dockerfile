@@ -14,13 +14,6 @@ COPY . /tmp/
 RUN \
   apt-get update && \
   apt-get install -y --no-install-recommends \
-    ed \
-    locales \
-    wget \
-    ca-certificates \
-    apt-transport-https \
-    build-essential \
-    curl \
     python3 \
     python3-dev \
     python3-pip \

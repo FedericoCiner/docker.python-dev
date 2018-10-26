@@ -1,5 +1,3 @@
-# python3-base Dockerfile
-
 FROM federicociner/ubuntu:xenial
 MAINTAINER Federico Ciner <federico.ciner@gmail.com>
 

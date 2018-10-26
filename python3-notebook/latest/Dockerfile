@@ -1,5 +1,3 @@
-# python2-notebook Dockerfile
-
 FROM federicociner/python3-base:latest
 MAINTAINER Federico Ciner <federico.ciner@gmail.com>
 
@@ -18,7 +16,7 @@ RUN useradd -m -s /bin/bash -N -u $NB_UID $NB_USER
 
 USER $NB_USER
 
-# setup work directory for backward-compatibility
+# Setup work directory for backward-compatibility
 RUN mkdir /home/$NB_USER/work
 
 USER root
@@ -34,15 +32,15 @@ RUN adduser notebook sudo
 EXPOSE 8888
 WORKDIR $HOME
 
-# configure container startup
+# Configure container startup
 ENTRYPOINT ["tini", "--"]
 CMD ["start.sh"]
 
 COPY jupyter_notebook_config.py /etc/jupyter/
 RUN chown -R $NB_USER:users /etc/jupyter/
 
-# switch back to jovyan to avoid accidental container runs as root
+# Switch back to jovyan to avoid accidental container runs as root
 USER $NB_USER
 
-# add local files as late as possible to avoid cache busting
+# Add local files as late as possible to avoid cache busting
 COPY start.sh /usr/local/bin/
